@@ -20,21 +20,22 @@ const Signin = () => {
 				password,
 				email
 			})
-
 		})
 			.then(res => res.json())
 			.then(data => {
-				console.log(data);
+				console.log(data)
 				if (data.error) {
 					M.toast({ html: 'data.error', classes: 'red darken-3' });
 				} else {
+					localStorage.setItem('jwt', data.token);
+					localStorage.setItem('user', JSON.stringify(data.user));
 					M.toast({ html: 'signedin success', classes: 'green darken-1' });
 					history.push('/');
 				}
 			})
 			.catch(err => {
 				console.log(err);
-			})
+			});
 	};
 	return (
 		<div className='mycard'>
