@@ -47,3 +47,9 @@ main {
 	max-width: 500px;
 	height: max-content;
 }
+
+#toast-container {
+	top: 130px !important;
+	right: 20px !important;
+	left: auto !important;
+}
