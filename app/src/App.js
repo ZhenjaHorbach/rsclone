@@ -12,7 +12,6 @@ import NewPost from './components/screens/NewPost';
 import { reducer, initialState } from './components/reducers/userReducer';
 
 export const UserContext = createContext();
-
 const Routing = () => {
 	const history = useHistory();
 	const { state, dispatch } = useContext(UserContext);
@@ -20,7 +19,7 @@ const Routing = () => {
 		const user = JSON.parse(localStorage.getItem('user'));
 		if (user) {
 			dispatch({ user: 'USER', payload: user });
-		
+
 		} else {
 			history.push('/signin');
 		}
