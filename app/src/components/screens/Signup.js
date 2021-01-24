@@ -33,7 +33,7 @@ const Signup = () => {
 					history.push('/signin');
 				}
 			})
-			.catch(err=>{
+			.catch(err => {
 				console.log(err);
 			})
 	};
@@ -44,7 +44,7 @@ const Signup = () => {
 				<h2>Instagram</h2>
 				<input type='text' placeholder='name' value={name} onChange={(e) => setName(e.target.value)} />
 				<input type='text' placeholder='email' value={email} onChange={(e) => setEmail(e.target.value)} />
-				<input type='text' placeholder='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+				<input type='password' placeholder='password' value={password} onChange={(e) => setPassword(e.target.value)} />
 				<button className="btn waves-effect waves-light blue lighten-2" onClick={() => PostData()}>
 					SignUp
 			</button>
