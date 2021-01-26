@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/signup', (req, res) => {
-	const { name, email, password } = req.body;
+	const { name, email, password, pic } = req.body;
 	if (!email || !password || !name) {
 		return res.status(422).json({ error: 'please add all info' });
 	}
@@ -23,7 +23,7 @@ router.post('/signup', (req, res) => {
 		}
 		bcrypt.hash(password, 12)
 			.then(hashedpassword => {
-				const user = new User({ email, password: hashedpassword, name });
+				const user = new User({ email, password: hashedpassword, name, pic });
 
 				user.save()
 					.then(user => {
@@ -53,8 +53,8 @@ router.post('/signin', (req, res) => {
 				.then(doMatch => {
 					if (doMatch) {
 						const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
-						const { _id, name, email } = savedUser;
-						res.json({ token, user: { _id, name, email } });
+						const { _id, name, email, followers, following, pic } = savedUser;
+						res.json({ token, user: { _id, name, email, followers, following, pic } });
 					} else {
 						return res.status(422).json({ error: 'Invalid Email or password' });
 					}
