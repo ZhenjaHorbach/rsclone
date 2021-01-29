@@ -8,6 +8,7 @@ import M from 'materialize-css';
 const NavBar = () => {
 	const searchModal = useRef(null);
 	const [search, setSearch] = useState('');
+	const [userDetails, setUserDetails] = useState([]);
 	const { state, dispatch } = useContext(UserContext);
 	const history = useHistory();
 	useEffect(() => {
@@ -36,6 +37,23 @@ const NavBar = () => {
 			]
 		}
 	}
+
+	const fetchUsers = (query) => {
+		setSearch(query)
+		fetch('/search-users', {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				query
+			})
+		})
+			.then(res => res.json())
+			.then(result => {
+				setUserDetails(result.user);
+			})
+	}
 	return (
 		<nav>
 			<div className="nav-wrapper">
@@ -46,27 +64,22 @@ const NavBar = () => {
 			</div>
 			<div id="modal1" className="modal" ref={searchModal} style={{ color: 'black' }}>
 				<div className="modal-content" style={{ color: 'black' }}>
-					<input type='text' placeholder='search' value={search} onChange={(e) => setSearch(e.target.value)} />
+					<input type='text' placeholder='search' value={search} onClick={() => history.push('/profile')} onChange={(e) => fetchUsers(e.target.value)} />
 					<ul className="collection">
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
-						<li className="collection-item" style={{ width: '100 %' }}>Alvin</li>
+						{userDetails.map(item => {
+							return <Link to={item._id !== state._id ? `/profile/${item._id}` : '/profile'} onClick={() => {
+								M.Modal.getInstance(searchModal.current).close();
+								setSearch('');
+							}}> <li className="collection-item" style={{ width: '100%', color: 'black' }}>{item.email}</li></Link>
+						})}
+
 					</ul>
 				</div>
 				<div className="modal-footer">
-					<button className="modal-close waves-effect waves-green btn-flat">Agree</button>
+					<button className="modal-close waves-effect waves-green btn-flat" onClick={() => setSearch('')}>Exit</button>
 				</div>
 			</div>
-		</nav>
+		</nav >
 	);
 }
 
