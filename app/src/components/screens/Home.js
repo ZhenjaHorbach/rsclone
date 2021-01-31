@@ -82,7 +82,6 @@ const Home = () => {
 			})
 		}).then(res => res.json())
 			.then(result => {
-				console.log(result);
 				const newData = data.map(item => {
 					if (item._id == result._id) {
 						return result;
@@ -113,46 +112,60 @@ const Home = () => {
 	}
 
 	return (
-		<div className='home'>
+		<div className='mainpaig'>
 			{
 				data.map(item => {
 					return (
-						<div className='card home-card' key={item._id}>
-							<h5><Link to={item.postedBy._id !== state._id ? `/profile/${item.postedBy._id}` : `/profile/`}>{item.postedBy.name}</Link>
-								{item.postedBy._id === state._id &&
-									<i className='material-icons' onClick={() => { deletePost(item._id) }}>clear</i>}
-							</h5>
-							<div className='card-image'>
-								<img src={item.photo} />
+						<div className='mainpaig__home-card' key={item._id}>
+							<div className='mainpaig__home-user'>
+								<div>
+									<Link to={item.postedBy._id !== state._id ? `/profile/${item.postedBy._id}` : `/profile/`}><img className='mainpaig__home-user-img' src={item.postedBy.pic} /></Link>
+									<h5 className='mainpaig__home-user-name'><Link to={item.postedBy._id !== state._id ? `/profile/${item.postedBy._id}` : `/profile/`}>{item.postedBy.name}</Link>
+									</h5>
+								</div>
+								<div className='mainpaig__home-user-delete'>
+									{item.postedBy._id === state._id &&
+										<i className='material-icons' onClick={() => { deletePost(item._id) }}>clear</i>
+									}
+								</div>
+							</div>
+							<div className='mainpaig__home-img'>
+								<img src={item.photo} className='mainpaig__home-img-img' />
 							</div>
 							<div className='card-content'>
-								<i className="material-icons">favorite</i>
 								{item.likes.includes(state ? state._id : null)
-									? <i className="material-icons" onClick={() => {
+									? <i className="material-icons" style={{ color: 'red', cursor: 'pointer' }} onClick={() => {
 										return (state ? unlikePost(item._id) : null)
-									}}>thumb_down</i>
-									: <i className="material-icons" onClick={() => {
+									}}>favorite</i>
+									: <i className="material-icons" style={{ cursor: 'pointer' }} onClick={() => {
 										return (state ? likePost(item._id) : null)
-									}}>thumb_up</i>
+									}}>favorite</i>
 								}
-								<h6>{item.likes.length} likes</h6>
-								<h6>{item.title}</h6>
-								<p>{item.body}</p>
-								{
-									item.comments.map(record => {
-										return (
-											<h6 key={record._id}>
-												<span style={{ fontWeight: '500' }}>{record.postedBy.name}</span> {record.text}
-											</h6>
-										)
-									})
-								}
+								<h6 className='mainpaig__home-likes' >{item.likes.length} отметок "Нравится"</h6>
+								<h6 className='mainpaig__home-title' >Название поста: <span>{item.title}</span></h6>
+								<p className='mainpaig__home-text' >Описание: <span>{item.body}</span></p>
+								<div className='mainpaig__home-comments'>
+									{
+										item.comments.map(record => {
+											console.log(record)
+											return (
+												<div className='mainpaig__home-comment'>
+													<Link to={record.postedBy._id !== state._id ? `/profile/${record.postedBy._id}` : `/profile/`}><img src={record.postedBy.pic} /></Link>,
+													<h6 key={record._id}>
+														<Link to={record.postedBy._id !== state._id ? `/profile/${record.postedBy._id}` : `/profile/`}><span style={{ fontWeight: '500' }}>{record.postedBy.name}</span></Link>: {record.text}
+													</h6>
+												</div>
+											)
+										})
+									}
+								</div>
 								<form onSubmit={(e) => {
 									e.preventDefault();
-									makeComment(e.target[0].value, item._id)
+									makeComment(e.target[0].value, item._id);
+									e.target[0].value = '';
 								}}>
 
-									<input type='text' placeholder='add a comment' />
+									<input type='text' className='home-comment' placeholder='Добавить комментарий...' />
 								</form>
 							</div>
 

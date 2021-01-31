@@ -26,9 +26,8 @@ const NewPost = () => {
 				.then(res => res.json())
 				.then(data => {
 					if (data.error) {
-						M.toast({ html: 'data.error', classes: 'red darken-3' });
+						M.toast({ html: data.error, classes: 'red darken-3' });
 					} else {
-						M.toast({ html: 'Created post Successfully', classes: 'green darken-1' });
 						history.push('/');
 					}
 				})
@@ -58,20 +57,20 @@ const NewPost = () => {
 	}
 
 	return (
-		<div className='card input-filed' style={{ margin: '10px auto', maxWidth: '500px', textAlign: 'center', padding: '30px' }}>
-			<input type='text' placeholder='title' value={title} onChange={(e) => setTitle(e.target.value)} />
-			<input type='text' placeholder='body' value={body} onChange={(e) => setBody(e.target.value)} />
+
+		<div className='mainpaig mainpaig__newpost'>
+			<h1>Новый пост</h1>
+			<input type='text' placeholder='Название поста' value={title} onChange={(e) => setTitle(e.target.value)} id='my-card__input' />
+			<input type='text' placeholder='Описание' value={body} onChange={(e) => setBody(e.target.value)} id='my-card__input' />
 			<div className="file-field input-field">
-				<div className="btn">
-					<span>Upload Image</span>
-					<input type="file" onChange={(e) => setImage(e.target.files[0])} />
+				<div className='my-card__load-file' >
+					<p >Загрузка фото</p>
+					<input type="file" onChange={(e) => setImage(e.target.files[0])} placeholder='Электронный адрес' />
 				</div>
-				<div className="file-path-wrapper">
-					<input className="file-path validate" type="text" placeholder="Upload one or more files" />
-				</div>
+
 			</div>
-			<button className="btn waves-effect waves-light blue lighten-2" onClick={() => postDetails()}>
-				Submit post
+			<button className="btn waves-effect waves-light blue lighten-2 " id='my-card__button' onClick={() => postDetails()}>
+				Загрузить пост
 				</button>
 
 		</div>

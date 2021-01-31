@@ -3,16 +3,13 @@ import '../App.css';
 
 const Footer = () => {
 	return (
-		<footer className="page-footer">
-			<div className="footer-copyright">
-				<div className="container">
-					<p className="grey-text text-lighten-4 left">© 2021 RS school</p>
-					<p>
-						<a className="grey-text text-lighten-4 right" href="#!">More Links</a>
-					</p>
-				</div>
-			</div>
-		</footer>
+		<div className="footerBody">
+			<a href="https://github.com/ZhenjaHorbach" target="_blank" className="footerBodyGit"><p>GitHub</p></a>
+			<p className="footerBodyYearName">2021 © Instagram clone</p>
+			<a href="https://rs.school/js/" target="_blank" className="footerBodyImg">
+				<img src="https://rs.school/images/rs_school_js.svg" />
+			</a>
+		</div>
 	);
 }
 

@@ -10,7 +10,7 @@ router.get('/user/:id', requireLogin, (req, res) => {
 		.select('-password')
 		.then(user => {
 			Post.find({ postedBy: req.params.id })
-				.populate('postedBy', '_id name')
+				.populate('postedBy', '_id name pic')
 				.exec((err, posts) => {
 					if (err) {
 						return res.status(422).json({ error: err });
@@ -19,7 +19,7 @@ router.get('/user/:id', requireLogin, (req, res) => {
 				});
 		})
 		.catch(err => {
-			return res.status(404).json({ error: 'Not found' });
+			return res.status(404).json({ error: 'Не найдено' });
 		})
 });
 
@@ -67,7 +67,7 @@ router.put('/unfollow', requireLogin, (req, res) => {
 router.put('/updatepic', requireLogin, (req, res) => {
 	User.findByIdAndUpdate(req.user._id, { $set: { pic: req.body.pic } }, { new: true }, (err, result) => {
 		if (err) {
-			return res.status(422).json({ error: 'pic canot post ' });
+			return res.status(422).json({ error: 'Не выбрано фото' });
 		}
 		res.json(result);
 	})
@@ -76,7 +76,7 @@ router.put('/updatepic', requireLogin, (req, res) => {
 router.post('/search-users', (req, res) => {
 	let userPattern = new RegExp('^' + req.body.query);
 	User.find({ email: { $regex: userPattern } })
-		.select('_id email pic')
+		.select('_id email name pic')
 		.then(user => {
 			res.json({ user })
 		})

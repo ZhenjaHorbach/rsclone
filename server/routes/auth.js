@@ -14,12 +14,12 @@ router.get('/', (req, res) => {
 router.post('/signup', (req, res) => {
 	const { name, email, password, pic } = req.body;
 	if (!email || !password || !name) {
-		return res.status(422).json({ error: 'please add all info' });
+		return res.status(422).json({ error: 'Заполните все пункты' });
 	}
 
 	User.findOne({ email: email }).then((savedUser) => {
 		if (savedUser) {
-			return res.status(422).json({ error: 'user already exists with that email' });
+			return res.status(422).json({ error: 'Пользователь с таким email уже существует' });
 		}
 		bcrypt.hash(password, 12)
 			.then(hashedpassword => {
@@ -27,7 +27,7 @@ router.post('/signup', (req, res) => {
 
 				user.save()
 					.then(user => {
-						res.json({ message: 'saved successfully' });
+						res.json({ message: 'Успешно сохранено' });
 					})
 					.catch(err => {
 						console.log(err);
@@ -42,12 +42,12 @@ router.post('/signup', (req, res) => {
 router.post('/signin', (req, res) => {
 	const { email, password } = req.body;
 	if (!email || !password) {
-		return res.status(422).json({ error: 'provide email or password' });
+		return res.status(422).json({ error: 'Укажите email или пароль' });
 	}
 	User.findOne({ email: email })
 		.then(savedUser => {
 			if (!savedUser) {
-				return res.status(422).json({ error: 'Invalid Email or password' });
+				return res.status(422).json({ error: 'Укажите email или пароль' });
 			}
 			bcrypt.compare(password, savedUser.password)
 				.then(doMatch => {
@@ -56,7 +56,7 @@ router.post('/signin', (req, res) => {
 						const { _id, name, email, followers, following, pic } = savedUser;
 						res.json({ token, user: { _id, name, email, followers, following, pic } });
 					} else {
-						return res.status(422).json({ error: 'Invalid Email or password' });
+						return res.status(422).json({ error: 'Неверный email или пароль' });
 					}
 				})
 				.catch(err => {

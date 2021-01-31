@@ -13,30 +13,7 @@ const NavBar = () => {
 	const history = useHistory();
 	useEffect(() => {
 		M.Modal.init(searchModal.current)
-	}, [])
-
-	const renderList = () => {
-		if (state) {
-			return [
-				<li key='search'><i data-target='modal1' className='large material-icons modal-trigger' >search</i></li>,
-				<li key='profile'><Link to="/profile">Profile</Link></li>,
-				<li key='create'><Link to="/create">New Post</Link></li>,
-				<li key='newpost'><Link to="/myfollowingpost">My following Posts</Link></li>,
-				<li key='logout'><button className="btn waves-effect waves-light blue lighten-2" onClick={() => {
-					localStorage.clear()
-					dispatch({ type: 'CLEAR' })
-					history.push('/signin')
-				}}
-				>Logout</button>
-				</li>
-			]
-		} else {
-			return [
-				<li key='signup'><Link to="/signup">Signup</Link></li>,
-				<li key='signin'><Link to="/signin">Signin</Link></li>
-			]
-		}
-	}
+	}, []);
 
 	const fetchUsers = (query) => {
 		setSearch(query)
@@ -53,34 +30,73 @@ const NavBar = () => {
 			.then(result => {
 				setUserDetails(result.user);
 			})
-	}
-	return (
-		<nav>
-			<div className="nav-wrapper">
-				<Link to={state ? "/" : '/signin'} className="brand-logo left">Instagram</Link>
-				<ul id="" className="right ">
-					{renderList()}
-				</ul>
-			</div>
-			<div id="modal1" className="modal" ref={searchModal} style={{ color: 'black' }}>
-				<div className="modal-content" style={{ color: 'black' }}>
-					<input type='text' placeholder='search' value={search} onClick={() => history.push('/profile')} onChange={(e) => fetchUsers(e.target.value)} />
-					<ul className="collection">
-						{userDetails.map(item => {
-							return <Link to={item._id !== state._id ? `/profile/${item._id}` : '/profile'} onClick={() => {
-								M.Modal.getInstance(searchModal.current).close();
-								setSearch('');
-							}}> <li className="collection-item" style={{ width: '100%', color: 'black' }}>{item.email}</li></Link>
-						})}
+	};
 
-					</ul>
+	const renderList = () => {
+		if (state) {
+			return [
+				<div className='navbar-block'>
+					<nav className='navbar'>
+						<div className="nav-wrapper">
+							<Link to={state ? "/" : '/signin'} className="site-name">Instagram</Link>
+							<div className='modal-trigger search' data-target='modal1'><i className='material-icons search-icons' >search</i>Поиск</div>
+							<ul id="" className="right navbar-panel">
+								<li key='home' data-title="Домой"><Link to={state ? "/" : '/signin'} ><img src="https://img.icons8.com/fluent-systems-filled/24/000000/home.png" /></Link></li>,
+								<li key='newpost' data-title="Фото друзей"><Link to="/myfollowingpost"><img src="https://img.icons8.com/fluent-systems-regular/24/000000/hearts.png" /></Link></li>,
+								<li key='profile' data-title="Профиль"><Link to="/profile"><img src="https://img.icons8.com/material-outlined/24/000000/user-female-circle.png" /></Link></li>,
+				<li key='create' data-title="Новый пост"><Link to="/create"><img src="https://img.icons8.com/material-two-tone/24/000000/plus-math--v1.png" /></Link></li>,
+				<li key='logout' data-title="Выход"><Link to="/signin"><img src="https://img.icons8.com/fluent-systems-filled/24/000000/exit.png" onClick={() => {
+									localStorage.clear()
+									dispatch({ type: 'CLEAR' })
+									history.push('/signin')
+								}}
+								/>
+								</Link>
+								</li>
+							</ul>
+						</div>
+						<div id="modal1" className="modal" ref={searchModal} style={{ color: 'black', transform: 'none' }}>
+							<div className="modal-content" style={{ color: 'black' }}>
+
+								<input type='text' placeholder='Поиск' value={search} onChange={(e) => fetchUsers(e.target.value)} />
+								<ul className="collection">
+									{userDetails.map(item => {
+										return <Link onClick={() => {
+											M.Modal.getInstance(searchModal.current).close();
+											if (item._id !== state._id) {
+												history.push(`/profile`);
+												setTimeout(() => {
+													history.push('/profile/' + item._id);
+												}, 10);
+											} else {
+												history.push(`/profile`)
+											}
+										}}> <div className="collection-item" >
+												<img src={item.pic} />
+												<div>
+													<p>{item.name}</p>
+													<p>{item.email}</p>
+												</div>
+											</div>
+
+
+
+										</Link>
+									})}
+
+								</ul>
+							</div>
+							<div className="modal-footer">
+								<button className="modal-close exit-button" onClick={() => setSearch('')}>Выйти</button>
+							</div>
+						</div>
+					</nav >
 				</div>
-				<div className="modal-footer">
-					<button className="modal-close waves-effect waves-green btn-flat" onClick={() => setSearch('')}>Exit</button>
-				</div>
-			</div>
-		</nav >
-	);
+			]
+		}
+	}
+
+	return [renderList()];
 }
 
 export default NavBar;
