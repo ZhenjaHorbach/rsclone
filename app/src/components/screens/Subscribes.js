@@ -82,7 +82,6 @@ const Home = () => {
 			})
 		}).then(res => res.json())
 			.then(result => {
-				console.log(result);
 				const newData = data.map(item => {
 					if (item._id == result._id) {
 						return result;
@@ -148,7 +147,6 @@ const Home = () => {
 								<div className='mainpaig__home-comments'>
 									{
 										item.comments.map(record => {
-											console.log(record)
 											return (
 												<div className='mainpaig__home-comment'>
 													<Link to={record.postedBy._id !== state._id ? `/profile/${record.postedBy._id}` : `/profile/`}><img src={record.postedBy.pic} /></Link>,

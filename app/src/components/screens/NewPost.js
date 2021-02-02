@@ -9,6 +9,7 @@ const NewPost = () => {
 	const [body, setBody] = useState('');
 	const [image, setImage] = useState('');
 	const [url, setUrl] = useState('');
+	
 	useEffect(() => {
 		if (url) {
 			fetch('/createpost', {

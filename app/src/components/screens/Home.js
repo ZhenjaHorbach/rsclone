@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../../App';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
+
 const Home = () => {
 
 	const [data, setData] = useState([]);
 	const { state, dispatch } = useContext(UserContext);
 	const like = null;
+	const history = useHistory();
 
 	useEffect(() => {
 		fetch('/allpost', {
@@ -40,7 +44,7 @@ const Home = () => {
 				})
 				setData(newData);
 			}).catch(err => {
-				console.log(err);
+				history.push('/signin');
 			});
 	};
 
@@ -114,9 +118,10 @@ const Home = () => {
 	return (
 		<div className='mainpaig'>
 			{
+
 				data.map(item => {
 					return (
-						<div className='mainpaig__home-card' key={item._id}>
+						<div div className='mainpaig__home-card' key={item._id} >
 							<div className='mainpaig__home-user'>
 								<div>
 									<Link to={item.postedBy._id !== state._id ? `/profile/${item.postedBy._id}` : `/profile/`}><img className='mainpaig__home-user-img' src={item.postedBy.pic} /></Link>
@@ -147,7 +152,6 @@ const Home = () => {
 								<div className='mainpaig__home-comments'>
 									{
 										item.comments.map(record => {
-											console.log(record)
 											return (
 												<div className='mainpaig__home-comment'>
 													<Link to={record.postedBy._id !== state._id ? `/profile/${record.postedBy._id}` : `/profile/`}><img src={record.postedBy.pic} /></Link>,

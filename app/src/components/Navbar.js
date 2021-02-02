@@ -11,6 +11,7 @@ const NavBar = () => {
 	const [userDetails, setUserDetails] = useState([]);
 	const { state, dispatch } = useContext(UserContext);
 	const history = useHistory();
+
 	useEffect(() => {
 		M.Modal.init(searchModal.current)
 	}, []);
@@ -39,7 +40,7 @@ const NavBar = () => {
 					<nav className='navbar'>
 						<div className="nav-wrapper">
 							<Link to={state ? "/" : '/signin'} className="site-name">Instagram</Link>
-							<div className='modal-trigger search' data-target='modal1'><i className='material-icons search-icons' >search</i>Поиск</div>
+							<div key="1" className='modal-trigger search' data-target='modal1'><i className='material-icons search-icons' data-target='modal1'>search</i>Поиск</div>
 							<ul id="" className="right navbar-panel">
 								<li key='home' data-title="Домой"><Link to={state ? "/" : '/signin'} ><img src="https://img.icons8.com/fluent-systems-filled/24/000000/home.png" /></Link></li>,
 								<li key='newpost' data-title="Фото друзей"><Link to="/myfollowingpost"><img src="https://img.icons8.com/fluent-systems-regular/24/000000/hearts.png" /></Link></li>,
@@ -55,48 +56,52 @@ const NavBar = () => {
 								</li>
 							</ul>
 						</div>
-						<div id="modal1" className="modal" ref={searchModal} style={{ color: 'black', transform: 'none' }}>
-							<div className="modal-content" style={{ color: 'black' }}>
-
-								<input type='text' placeholder='Поиск' value={search} onChange={(e) => fetchUsers(e.target.value)} />
-								<ul className="collection">
-									{userDetails.map(item => {
-										return <Link onClick={() => {
-											M.Modal.getInstance(searchModal.current).close();
-											if (item._id !== state._id) {
-												history.push(`/profile`);
-												setTimeout(() => {
-													history.push('/profile/' + item._id);
-												}, 10);
-											} else {
-												history.push(`/profile`)
-											}
-										}}> <div className="collection-item" >
-												<img src={item.pic} />
-												<div>
-													<p>{item.name}</p>
-													<p>{item.email}</p>
-												</div>
-											</div>
-
-
-
-										</Link>
-									})}
-
-								</ul>
-							</div>
-							<div className="modal-footer">
-								<button className="modal-close exit-button" onClick={() => setSearch('')}>Выйти</button>
-							</div>
-						</div>
 					</nav >
 				</div>
 			]
 		}
 	}
 
-	return [renderList()];
+	return (
+		<div>
+			{renderList()}
+			<div id="modal1" className="modal" ref={searchModal} style={{ color: 'black', transform: 'none' }}>
+				<div className="modal-content" style={{ color: 'black' }}>
+
+					<input type='text' placeholder='Поиск' value={search} onChange={(e) => fetchUsers(e.target.value)} />
+					<ul className="collection">
+						{userDetails.map(item => {
+							return <Link onClick={() => {
+								M.Modal.getInstance(searchModal.current).close();
+								if (item._id !== state._id) {
+									history.push(`/profile`);
+									setTimeout(() => {
+										history.push('/profile/' + item._id);
+									}, 10);
+								} else {
+									history.push(`/profile`)
+								}
+							}}> <div className="collection-item" >
+									<img src={item.pic} />
+									<div>
+										<p>{item.name}</p>
+										<p>{item.email}</p>
+									</div>
+								</div>
+
+
+
+							</Link>
+						})}
+
+					</ul>
+				</div>
+				<div className="modal-footer">
+					<button className="modal-close exit-button" onClick={() => setSearch('')}>Выйти</button>
+				</div>
+			</div>
+		</div>
+	);
 }
 
 export default NavBar;

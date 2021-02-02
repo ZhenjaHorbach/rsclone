@@ -8,7 +8,7 @@ const { JWT_SECRET } = require('../keys');
 const requireLogin = require('../middleware/requireLogin');
 
 router.get('/', (req, res) => {
-	res.send('hello');
+	history.push('/signin')
 });
 
 router.post('/signup', (req, res) => {
@@ -56,7 +56,7 @@ router.post('/signin', (req, res) => {
 						const { _id, name, email, followers, following, pic } = savedUser;
 						res.json({ token, user: { _id, name, email, followers, following, pic } });
 					} else {
-						return res.status(422).json({ error: 'Неверный email или пароль' });
+						return res.status(422).json({ error: 'Укажите email или пароль' });
 					}
 				})
 				.catch(err => {
